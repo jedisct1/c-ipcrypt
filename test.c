@@ -12,10 +12,10 @@ main(void)
     unsigned char k[16] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
     unsigned char out2[4];
     unsigned char out[4];
-    unsigned char expected[4] = { 7, 117, 189, 224 };
-    unsigned int  i;
+    unsigned char expected[4] = { 93, 155, 197, 186 };
+    unsigned long i;
 
-    for (i = 0; i < 10000; i++) {        
+    for (i = 0; i < 100000000UL; i++) {
         ipcrypt_encrypt(out, ip, k);
         ipcrypt_decrypt(out2, out, k);
         assert(memcmp(out2, ip, 4) == 0);
