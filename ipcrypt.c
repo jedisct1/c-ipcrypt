@@ -56,6 +56,7 @@ ipcrypt_encrypt(unsigned char out[IPCRYPT_BYTES],
                 const unsigned char key[IPCRYPT_KEYBYTES])
 {
     unsigned char state[4];
+    int i;
 
     xor4(state, in, key);
     arx_fwd(state);
@@ -63,7 +64,14 @@ ipcrypt_encrypt(unsigned char out[IPCRYPT_BYTES],
     arx_fwd(state);
     xor4(state, state, key + 8);
     arx_fwd(state);
+    xor4(state, state, key + 12);
+    arx_fwd(state);
+    xor4(state, state, key + 4);
+    arx_fwd(state);
+    xor4(state, state, key + 8);
+    arx_fwd(state);
     xor4(out, state, key + 12);
+
 
     return 0;
 }
@@ -84,4 +92,18 @@ ipcrypt_decrypt(unsigned char out[IPCRYPT_BYTES],
     xor4(out, state, key);
 
     return 0;
+}
+
+int main(void)
+{
+    unsigned char out[4];
+    const unsigned char in[4] = {1,2,3,4};
+    const char *key = "some 16-byte key";
+    const char *key2 = "some 16-byte kex";
+    
+    ipcrypt_encrypt(out, in, key);
+    printf("%d %d %d %d\n", out[0], out[1], out[2], out[3]);
+    ipcrypt_encrypt(out, in, key2);
+    printf("%d %d %d %d\n", out[0], out[1], out[2], out[3]);
+     return 0;
 }
